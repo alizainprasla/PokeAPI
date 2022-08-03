@@ -9,7 +9,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-struct PokeListViewModel: ViewModelProtocol {
+public struct PokeListViewModel: ViewModelProtocol {
     struct Input {
         let latestItems: Observable<Void>
         let loadMore: Observable<Void>
@@ -24,7 +24,7 @@ struct PokeListViewModel: ViewModelProtocol {
     private let bag = DisposeBag()
     private let pageSize = 20
     let useCase: PokeListUseCase
-    //let title: String = StringResource.feed
+    let title: String = StringResource.home
     
     func transform(input: Input) -> Output {
         let currentPage = BehaviorRelay<Int>(value: 1)
@@ -34,7 +34,7 @@ struct PokeListViewModel: ViewModelProtocol {
         
         let loadMore = input.loadMore
             .do(onNext: {
-                let nextPage = currentPage.value + 1
+                let nextPage = currentPage.value + pageSize
                 currentPage.accept(nextPage)
             })
 
@@ -77,9 +77,9 @@ struct PokeListViewModel: ViewModelProtocol {
     }
 }
 
-extension PokeListViewModel {
+public extension PokeListViewModel {
     struct SectionModel {
-        var items: [SectionItem]
+        public var items: [SectionItem]
     }
 
     enum SectionItem {
@@ -88,9 +88,9 @@ extension PokeListViewModel {
 }
 
 extension PokeListViewModel.SectionModel: SectionModelType {
-    typealias Item = PokeListViewModel.SectionItem
+    public typealias Item = PokeListViewModel.SectionItem
 
-    init(original: PokeListViewModel.SectionModel, items: [Item]) {
+    public init(original: PokeListViewModel.SectionModel, items: [Item]) {
         self = original
         self.items = items
     }

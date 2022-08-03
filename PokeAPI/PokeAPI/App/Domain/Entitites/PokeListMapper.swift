@@ -12,18 +12,8 @@ import UIKit
 struct PokeListMapper: Codable {
     let count: Int
     let next, previous: String?
-    let results: [Results]
+    let results: [CharacterMapper]
     
-    // MARK: - Result
-    struct Results: Codable {
-        let name: String
-        let url: String
-        
-        func toDomain() -> PokeCharacter {
-            return PokeCharacter(name: name, url: url, background: Color.randomGridColor())
-        }
-    }
-
     //MARK: - Translator
     var items: [PokeCharacter] {
         return results.map { $0.toDomain() }
@@ -38,5 +28,17 @@ struct PokeListMapper: Codable {
         } catch {
             throw error
         }
+    }
+}
+
+// MARK: - Result
+struct CharacterMapper: Codable {
+    let name: String
+    let url: String
+    
+    func toDomain() -> PokeCharacter {
+        return PokeCharacter(name: name,
+                             url: url,
+                             background: Color.randomGridColor())
     }
 }
