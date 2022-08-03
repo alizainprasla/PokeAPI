@@ -22,7 +22,7 @@ public struct PokeListViewModel: ViewModelProtocol {
     }
     
     private let bag = DisposeBag()
-    private let pageSize = 20
+    private let limit = 20
     let useCase: PokeListUseCase
     let title: String = StringResource.home
     
@@ -34,7 +34,7 @@ public struct PokeListViewModel: ViewModelProtocol {
         
         let loadMore = input.loadMore
             .do(onNext: {
-                let nextPage = currentPage.value + pageSize
+                let nextPage = currentPage.value + limit
                 currentPage.accept(nextPage)
             })
 
@@ -46,7 +46,7 @@ public struct PokeListViewModel: ViewModelProtocol {
         Observable.merge(latestItems, loadMore)
             .flatMapLatest { keyword in
                 return useCase
-                    .getCharacterList(limit: pageSize, offset: currentPage.value)
+                    .getCharacterList(limit: limit, offset: currentPage.value)
                     .trackActivity(activityTracker)
                     .trackError(errorTracker)
                     .asDriver(onErrorJustReturn: [])

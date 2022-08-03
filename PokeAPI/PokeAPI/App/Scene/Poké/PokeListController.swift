@@ -49,7 +49,7 @@ class PokeListController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Hello"
+        self.navigationItem.title = viewModel.title
         setupCollectionView()
         bind()
         view.backgroundColor = Color.background
