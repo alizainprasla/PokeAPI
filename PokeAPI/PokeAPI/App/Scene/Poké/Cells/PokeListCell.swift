@@ -8,7 +8,6 @@
 import UIKit
 
 class PokeListCell: UICollectionViewCell {
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -29,9 +28,9 @@ class PokeListCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.cornerRadius()
         contentView.addSubview(titleLabel)
         contentView.addSubview(pokeImageView)
-        contentViewRadius()
         titleLabel.alignTop(with: contentView, constant: 10)
         titleLabel.alignLeadingTrailing(with: contentView, constant: 10)
         pokeImageView.alignBottom(with: contentView)
@@ -40,22 +39,16 @@ class PokeListCell: UICollectionViewCell {
         pokeImageView.constrainWidth(to: contentView, ratio: 0.6)
     }
     
-    func contentViewRadius() {
-        let radius: CGFloat = 10
-        contentView.layer.cornerRadius = radius
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.clear.cgColor
-        contentView.layer.masksToBounds = true
-        layer.cornerRadius = radius
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure() {
-        titleLabel.text = "Bulbasaur"
+}
+
+
+extension PokeListCell: CellViewModelProtocol {
+    func config(with viewModel: PokeCharacter) {
+        titleLabel.text = viewModel.name
         pokeImageView.image = UIImage(named: "5")
+        contentView.backgroundColor = viewModel.background
     }
-    
 }

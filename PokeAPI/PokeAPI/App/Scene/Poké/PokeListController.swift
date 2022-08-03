@@ -6,8 +6,25 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 class PokeListController: UIViewController {
+    
+    private let spinner = UIActivityIndicatorView(style: .medium)
+
+    private let emptyDataLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let bag = DisposeBag()
     
     lazy var layout: UICollectionViewFlowLayout = {
         let cellSpacing = self.view.width * 0.012
@@ -27,38 +44,56 @@ class PokeListController: UIViewController {
         return view
     }()
 
+    private var viewModel = PokeListViewModel(useCase: RemotePokeListUseCase())
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Hello"
         setupCollectionView()
-        view.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1)
+        bind()
+        view.backgroundColor = Color.background
     }
     
     func setupCollectionView() {
-        collectionView.register(PokeListCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.dataSource = self
         view.addSubview(collectionView)
         collectionView.align(with: view)
+        collectionView.register(PokeListCell.self, forCellWithReuseIdentifier: "PokeListCell")
         collectionView.reloadData()
     }
+    
+    private func bind() {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<PokeListViewModel.SectionModel>(configureCell: { datasource, collectionView, indexPath, _ in
+            switch datasource[indexPath] {
+            case let .item(viewModel):
+                return collectionView.configure(PokeListCell.self, viewModel, indexPath)
+            }
+        })
+        
+        let latestItems = Observable<Void>.just(())
+        let loadMore = collectionView.rx.onReachedEnd.do(onNext: nil)
+        let input = PokeListViewModel.Input(latestItems: latestItems, loadMore: loadMore)
+        let output = viewModel.transform(input: input)
+        
+        output.data
+            .drive(collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: bag)
+
+        output.data
+            .map { !($0.first?.items.isEmpty ?? false) }
+            .drive(emptyDataLabel.rx.isHidden)
+            .disposed(by: bag)
+
+        output.fetching
+            .asObservable()
+            .bind(to: self.spinner.rx.isHidden)
+            .disposed(by: bag)
+
+        output.error
+            .asObservable()
+            .bind { error in
+                self.spinner.isHidden = true
+            }
+            .disposed(by: bag)
+    }
 }
 
-extension PokeListController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PokeListCell
-        
-        let number = Int.random(in: 0..<777)
-        if number % 2 == 0 && number % 5 != 0 {
-            cell.backgroundColor = UIColor(red: 72/255, green: 208/255, blue: 177/255, alpha: 1)
-        } else {
-            cell.backgroundColor = UIColor(red: 255/255, green: 108/255, blue: 110/255, alpha: 1)
-        }
-        
-        cell.configure()
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
-    }
-}

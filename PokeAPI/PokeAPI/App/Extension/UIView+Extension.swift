@@ -1,9 +1,8 @@
 //
 //  UIView+Autolayout+Extension.swift
-//  PTC_IOS_TEST
+//  PokeAPI
 //
-//  Created by Alizain on 16/06/2022.
-//  Copyright © 2022 Jumia. All rights reserved.
+//  Created by Alizain on 29/07/2022.
 //
 
 import UIKit
@@ -296,10 +295,11 @@ extension UIView {
         }
     }
     
-    func addBoxShadow() {
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.1
-        layer.shadowOffset = .zero
-        layer.shadowRadius = 3
+    func cornerRadius(radius: CGFloat = 10) {
+        layer.cornerRadius = radius
+        layer.borderWidth = 3
+        layer.borderColor = UIColor.black.withAlphaComponent(0.06).cgColor
+        layer.masksToBounds = true
+        layer.cornerRadius = radius
     }
 }
