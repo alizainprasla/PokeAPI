@@ -27,10 +27,11 @@ class PokeListController: UIViewController {
     private let bag = DisposeBag()
     
     lazy var layout: UICollectionViewFlowLayout = {
+        let columns: CGFloat = self.view.bounds.width > 760 ? 3 : 2
         let cellSpacing = self.view.width * 0.012
         let inset = self.view.width * 0.05
-        let width = (self.view.width / 2) - cellSpacing - inset
-        let height = (self.view.width / 2 ) * 0.6
+        let width = (self.view.width / columns) - cellSpacing - inset
+        let height = (self.view.width / columns) * 0.6
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = cellSpacing
         layout.minimumInteritemSpacing = cellSpacing
