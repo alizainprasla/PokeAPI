@@ -2,17 +2,17 @@
 
 Implementations:
 -
-- :white_check_mark: Swift
-- :white_check_mark: MVVM
-- :white_check_mark: Clean Architecture
-- :white_check_mark: Unit Testing
-- :white_check_mark: No Storyboards and no XIBs
-- :white_check_mark: AutoLayout with Constraints
-- :white_check_mark: Human Interface Guidelines
-- :white_check_mark: Pagination
-- :white_check_mark: Functional Programming
+- Swift
+- MVVM
+- Clean Architecture
+- Unit Testing
+- No Storyboards and no XIBs
+- AutoLayout with Constraints
+- Human Interface Guidelines
+- Pagination
+- Functional Programming
 
-How to run the project:
+How to run the project :rocket:
 -
 - This project was developed on Xcode 13.4 using Swift 5 . Please run pod install after cloning the repo and checking out to master for running the project.
 
