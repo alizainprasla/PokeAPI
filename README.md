@@ -8,8 +8,8 @@ Implementations:
 - No Storyboards and no XIBs;
 - AutoLayout with Constraints;
 - Human Interface Guidelines;
-- Pagination
-- Functional Programming
+- Pagination;
+- Functional Programming;
 
 How to run the project:
 -
