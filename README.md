@@ -17,6 +17,11 @@ How to run the project:
 
 Instructions:
 -
+- Swift 5
+- Xcode 13.4
+
+CocoaPods:
+- 
 - RxSwift
 - RxCocoa
 - RxDataSources
