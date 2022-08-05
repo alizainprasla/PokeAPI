@@ -65,7 +65,6 @@ class PokeListCell: UICollectionViewCell {
 extension PokeListCell: CellViewModelProtocol {
     func config(with viewModel: PokeCharacter) {
         titleLabel.text = viewModel.name
-        pokeImageView.image = UIImage(named: "5")
         contentView.backgroundColor = viewModel.background
         pokeImageView.kf.setImage(with: viewModel.thumbnail)
     }

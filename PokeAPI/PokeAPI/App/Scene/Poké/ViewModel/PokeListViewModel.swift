@@ -40,7 +40,7 @@ public struct PokeListViewModel: ViewModelProtocol {
 
         let latestItems = input.latestItems
             .do(onNext: { _ in
-                currentPage.accept(1)
+                currentPage.accept(0)
             })
                 
         Observable.merge(latestItems, loadMore)

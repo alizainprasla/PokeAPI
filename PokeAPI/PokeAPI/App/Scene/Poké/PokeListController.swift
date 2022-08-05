@@ -11,7 +11,6 @@ import RxCocoa
 import RxDataSources
 
 class PokeListController: UIViewController {
-    
     private let spinner = UIActivityIndicatorView(style: .medium)
 
     private let emptyDataLabel: UILabel = {
@@ -23,8 +22,6 @@ class PokeListController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    private let bag = DisposeBag()
     
     lazy var layout: UICollectionViewFlowLayout = {
         let columns: CGFloat = self.view.bounds.width > 760 ? 3 : 2
@@ -46,6 +43,8 @@ class PokeListController: UIViewController {
     }()
 
     private var viewModel = PokeListViewModel(useCase: RemotePokeListUseCase())
+    
+    private let bag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +68,18 @@ class PokeListController: UIViewController {
                 return collectionView.configure(PokeListCell.self, viewModel, indexPath)
             }
         })
+        
+        collectionView.rx.itemSelected
+          .subscribe(onNext: { [weak self] indexPath in
+              let section = dataSource.sectionModels[indexPath.section]
+              let row = section.items[indexPath.row]
+              switch row {
+              case let .item(viewModel: vm):
+                  let controller = PokeDetailController()
+                  controller.id = vm.number
+                  self?.navigationController?.pushViewController(controller, animated: true)
+              }
+          }).disposed(by: bag)
         
         let latestItems = Observable<Void>.just(())
         let loadMore = collectionView.rx.onReachedEnd.do(onNext: nil)
