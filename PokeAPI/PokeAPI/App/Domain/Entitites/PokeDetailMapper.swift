@@ -14,15 +14,12 @@ public struct PokeDetailMapper: Codable {
     let forms: [Species]
     let gameIndices: [GameIndex]
     let height: Int
-    let heldItems: [HeldItem]
     let id: Int
     let isDefault: Bool
     let locationAreaEncounters: String
-    let moves: [Move]
     let name: String
     let order: Int
-    let species: Species
-    let sprites: Sprites
+    let species: Species?
     let stats: [Stat]
     let types: [TypeElement]
     let weight: Int
@@ -33,13 +30,11 @@ public struct PokeDetailMapper: Codable {
         case forms
         case gameIndices = "game_indices"
         case height
-        case heldItems = "held_items"
         case id
         case isDefault = "is_default"
         case locationAreaEncounters = "location_area_encounters"
-        case moves, name, order
-        //case pastTypes = "past_types"
-        case species, sprites, stats, types, weight
+        case name, order
+        case species, stats, types, weight
     }
     
     var domain: PokeDetail {
@@ -88,139 +83,6 @@ struct GameIndex: Codable {
     }
 }
 
-// MARK: - HeldItem
-struct HeldItem: Codable {
-    let item: Species
-    let versionDetails: [VersionDetail]
-
-    enum CodingKeys: String, CodingKey {
-        case item
-        case versionDetails = "version_details"
-    }
-}
-
-// MARK: - VersionDetail
-struct VersionDetail: Codable {
-    let rarity: Int
-    let version: Species
-}
-
-// MARK: - Move
-struct Move: Codable {
-    let move: Species
-    let versionGroupDetails: [VersionGroupDetail]
-
-    enum CodingKeys: String, CodingKey {
-        case move
-        case versionGroupDetails = "version_group_details"
-    }
-}
-
-// MARK: - VersionGroupDetail
-struct VersionGroupDetail: Codable {
-    let levelLearnedAt: Int
-    let moveLearnMethod, versionGroup: Species
-
-    enum CodingKeys: String, CodingKey {
-        case levelLearnedAt = "level_learned_at"
-        case moveLearnMethod = "move_learn_method"
-        case versionGroup = "version_group"
-    }
-}
-
-// MARK: - GenerationV
-struct GenerationV: Codable {
-    let blackWhite: Sprites
-
-    enum CodingKeys: String, CodingKey {
-        case blackWhite = "black-white"
-    }
-}
-
-// MARK: - GenerationIv
-struct GenerationIv: Codable {
-    let diamondPearl, heartgoldSoulsilver, platinum: Sprites
-
-    enum CodingKeys: String, CodingKey {
-        case diamondPearl = "diamond-pearl"
-        case heartgoldSoulsilver = "heartgold-soulsilver"
-        case platinum
-    }
-}
-
-// MARK: - Versions
-struct Versions: Codable {
-    let generationI: GenerationI
-    let generationIi: GenerationIi
-    let generationIii: GenerationIii
-    let generationIv: GenerationIv
-    let generationV: GenerationV
-    let generationVi: [String: Home]
-    let generationVii: GenerationVii
-    let generationViii: GenerationViii
-
-    enum CodingKeys: String, CodingKey {
-        case generationI = "generation-i"
-        case generationIi = "generation-ii"
-        case generationIii = "generation-iii"
-        case generationIv = "generation-iv"
-        case generationV = "generation-v"
-        case generationVi = "generation-vi"
-        case generationVii = "generation-vii"
-        case generationViii = "generation-viii"
-    }
-}
-
-// MARK: - Sprites
-class Sprites: Codable {
-    let backDefault: String
-    let other: Other?
-    let versions: Versions?
-    let animated: Sprites?
-
-    enum CodingKeys: String, CodingKey {
-        case backDefault = "back_default"
-        case other, versions, animated
-    }
-
-    init(backDefault: String, other: Other?, versions: Versions?, animated: Sprites?) {
-        self.backDefault = backDefault
-        self.other = other
-        self.versions = versions
-        self.animated = animated
-    }
-}
-
-// MARK: - GenerationI
-struct GenerationI: Codable {
-    let redBlue, yellow: RedBlue
-
-    enum CodingKeys: String, CodingKey {
-        case redBlue = "red-blue"
-        case yellow
-    }
-}
-
-// MARK: - RedBlue
-struct RedBlue: Codable {
-    let backDefault, backGray, backTransparent, frontDefault: String
-    let frontGray, frontTransparent: String
-
-    enum CodingKeys: String, CodingKey {
-        case backDefault = "back_default"
-        case backGray = "back_gray"
-        case backTransparent = "back_transparent"
-        case frontDefault = "front_default"
-        case frontGray = "front_gray"
-        case frontTransparent = "front_transparent"
-    }
-}
-
-// MARK: - GenerationIi
-struct GenerationIi: Codable {
-    let crystal: Crystal
-    let gold, silver: Gold
-}
 
 // MARK: - Crystal
 struct Crystal: Codable {

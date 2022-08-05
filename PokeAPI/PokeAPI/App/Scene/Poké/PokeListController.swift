@@ -97,7 +97,7 @@ class PokeListController: UIViewController {
 
         output.fetching
             .asObservable()
-            .bind(to: self.spinner.rx.isHidden)
+            .bind(to: spinner.rx.isHidden)
             .disposed(by: bag)
 
         output.error
@@ -108,4 +108,3 @@ class PokeListController: UIViewController {
             .disposed(by: bag)
     }
 }
-

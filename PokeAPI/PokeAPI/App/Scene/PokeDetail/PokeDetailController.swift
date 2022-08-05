@@ -31,10 +31,10 @@ class PokeDetailController: UIViewController {
     
     private let emptyDataLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 0
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        label.textColor = .white
+        label.text = "No Data Found"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.textAlignment = .center
+        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -46,11 +46,13 @@ class PokeDetailController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        addPaginationSpinner()
+        setupEmptyDataLabel()
         bind()
         view.backgroundColor = Color.background
     }
     
-    func setupTableView() {
+    private func setupTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.align(with: view)
@@ -58,9 +60,23 @@ class PokeDetailController: UIViewController {
         tableView.reloadData()
     }
     
-    func bind() {
+    private func addPaginationSpinner() {
+        view.addSubview(spinner)
+        spinner.hidesWhenStopped = true
+        spinner.startAnimating()
+        spinner.centerVertical(with: view)
+        spinner.centerHorizontal(with: view)
+    }
+    
+    private func setupEmptyDataLabel() {
+        view.addSubview(emptyDataLabel)
+        emptyDataLabel.centerVertical(with: view)
+        emptyDataLabel.centerHorizontal(with: view)
+        emptyDataLabel.alignLeadingTrailing(with: view)
+    }
+    
+    private func bind() {
         dataSource = RxTableViewSectionedReloadDataSource<PokeDetailViewModel.SectionModel>(configureCell: { datasource, tableview, indexPath, _ in
-            print(indexPath)
             switch datasource[indexPath] {
             case let .detailItem(viewModel: vm):
                 return tableview.configure(PokeDetailCell.self, vm, indexPath)
@@ -79,16 +95,25 @@ class PokeDetailController: UIViewController {
             .map { !($0.first?.items.isEmpty ?? false) }
             .drive(emptyDataLabel.rx.isHidden)
             .disposed(by: bag)
-
+        
         output.fetching
             .asObservable()
-            .bind(to: self.spinner.rx.isHidden)
+            .subscribe(onNext: { isFetching in
+                if isFetching {
+                    self.spinner.startAnimating()
+                    
+                } else {
+                    self.spinner.stopAnimating()
+                }
+            })
             .disposed(by: bag)
 
         output.error
             .asObservable()
             .bind { error in
                 self.spinner.isHidden = true
+                self.emptyDataLabel.isHidden = false
+                self.emptyDataLabel.text = error.localizedDescription
             }
             .disposed(by: bag)
     }
