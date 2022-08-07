@@ -128,7 +128,6 @@ extension PokeDetailController: UITableViewDelegate {
             headerView.config(viewModel: detail)
             return headerView
         }
-        return nil
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

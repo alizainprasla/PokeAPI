@@ -61,7 +61,7 @@ class PokeDetailCell: UITableViewCell {
 }
 
 extension PokeDetailCell: CellViewModelProtocol {
-    typealias ViewModel = PokeDetail.Info.`Type`
+    typealias ViewModel = PokeDetail.Info.Types
     
     func config(with viewModel: ViewModel) {
         iconImageView.image = viewModel.image

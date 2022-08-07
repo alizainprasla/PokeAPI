@@ -27,14 +27,14 @@ public struct PokeDetail {
     }
 }
 
-extension PokeDetail {
+public extension PokeDetail {
 
-    public struct Info {
+    struct Info {
         
-        public let stats: [Type]
+        public let stats: [Types]
         
         public init(mapper: PokeDetailMapper) {
-            var stats = [`Type`]()
+            var stats = [Types]()
             
             let pokemonTypes = mapper.types.sorted { $0.slot < $1.slot }.compactMap { PokemonType($0) }
              stats.append(.pokemonTypes(pokemonTypes))
@@ -67,8 +67,8 @@ extension PokeDetail {
     }
 }
 
-extension PokeDetail.Info {
-    public enum `Type` {
+public extension PokeDetail.Info {
+    enum Types {
         case pokemonTypes([PokemonType])
         case height(Float)
         case weight(Float)

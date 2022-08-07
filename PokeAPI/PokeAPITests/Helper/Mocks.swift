@@ -18,10 +18,26 @@ struct MockPokeListUseCase: PokeListUseCase {
     }
 }
 
+struct MockPokeDetailUseCase: PokeDetailUseCase {
+    
+    func get(id: Int) -> Single<PokeDetail> {
+        return MockLoader
+            .load(returnType: PokeDetailMapper.self, file: "PokeDetails.json")
+            .map{ $0.domain }
+
+    }
+    
+    func getCharacterList(limit: Int, offset: Int) -> Single<[PokeCharacter]> {
+        return MockLoader
+            .load(returnType: PokeListMapper.self, file: "PokeCharacter.json")
+            .map { $0.items }
+    }
+}
+
 struct MockLoader {
     static func load<T: Decodable>(returnType: T.Type, file: String) -> Single<T> {
         return Single.create { single in
-            if let path = Bundle(for: PokeListControllerTests.self).path(forResource: file, ofType: "") {
+            if let path = Bundle(for: PokeListViewModelTests.self).path(forResource: file, ofType: "") {
                 let data = try? Data(contentsOf: URL(fileURLWithPath: path))
                 let decoder = JSONDecoder()
                 do {

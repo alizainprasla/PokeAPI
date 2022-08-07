@@ -12,18 +12,18 @@ import RxSwift
 import struct RxCocoa.Driver
 @testable import PokeAPI
 
-typealias ViewModel = PokeListViewModel
+typealias PokeListVM = PokeListViewModel
 
-class PokeListControllerTests: XCTestCase {
+class PokeListViewModelTests: XCTestCase {
 
     var testScheduler: TestScheduler!
-    var viewModel: ViewModel!
+    var viewModel: PokeListVM!
     let bag = DisposeBag()
 
     override func setUpWithError() throws {
         testScheduler = TestScheduler(initialClock: 0)
         let useCase: PokeListUseCase = MockPokeListUseCase()
-        viewModel = ViewModel(useCase: useCase)
+        viewModel = PokeListVM(useCase: useCase)
     }
 
     override func tearDownWithError() throws {}
@@ -35,7 +35,8 @@ class PokeListControllerTests: XCTestCase {
                 .next(0, ())
             ])
             .asObservable()
-        let input = ViewModel.Input(latestItems: latestItems, loadMore: .never())
+        
+        let input = PokeListVM.Input(latestItems: latestItems, loadMore: .never())
         let output = viewModel.transform(input: input)
 
         // When
@@ -60,7 +61,7 @@ class PokeListControllerTests: XCTestCase {
             ])
             .asObservable()
         
-        let input = ViewModel.Input(latestItems: latestItems, loadMore: loadMore)
+        let input = PokeListVM.Input(latestItems: latestItems, loadMore: loadMore)
         let output = viewModel.transform(input: input)
 
         // When
@@ -72,7 +73,7 @@ class PokeListControllerTests: XCTestCase {
     }
 }
 
-private extension Driver where Element == [ViewModel.SectionModel] {
+private extension Driver where Element == [PokeListVM.SectionModel] {
     var items: Observable<[PokeCharacter]> {
         return map { sectionModels -> [PokeCharacter] in
             return sectionModels[0].items

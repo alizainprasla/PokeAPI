@@ -29,7 +29,7 @@ public struct PokeDetailViewModel: ViewModelProtocol {
     let useCase: PokeDetailUseCase
     
     func transform(input: Input) -> Output {
-        let pokemonDetail = ReplaySubject<PokeDetail>.create(bufferSize: 0)
+        let pokemonDetail = ReplaySubject<PokeDetail>.create(bufferSize: 1)
         let activityTracker = ActivityIndicator()
         let errorTracker = ErrorTracker()
 
@@ -67,7 +67,7 @@ public extension PokeDetailViewModel {
     }
     
     enum SectionItem {
-        case detailItem(viewModel: PokeDetail.Info.`Type`)
+        case detailItem(viewModel: PokeDetail.Info.Types)
     }
 }
 
