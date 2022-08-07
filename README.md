@@ -1,7 +1,12 @@
 # PokeAPI
 
+![alt tag](Poke.gif)
+
 Implementations:
 -
+The main screen will then need to present with the Pokemon name and image. 
+In detail screen, user should see a list of a minimum of six descriptions with info plus character image.
+
 - [Implement PokeAPI](https://pokeapi.co/) 
 - Swift
 - MVVM
@@ -12,7 +17,7 @@ Implementations:
 - AutoLayout with Constraints
 - Human Interface Guidelines
 - Pagination
-- Functional Programming
+- Functional Reactive Programming (RxSwift)
 
 How to run the project:
 -
